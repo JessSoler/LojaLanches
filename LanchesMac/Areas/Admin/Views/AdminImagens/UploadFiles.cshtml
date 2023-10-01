@@ -5,6 +5,8 @@
 <hr />
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
+        @* Verifique se há uma mensagem de erro armazenada em ViewData["Erro"]. 
+        Se estiver presente, exibe uma imagem de erro e uma mensagem de erro. *@
         @if (ViewData["Erro"] != null)
         {
             <img src="~/images/erro1.png" width="150" height="150" />
@@ -12,6 +14,9 @@
         }
     </div>
     <div class="container">
+        @* Verifique se há um resultado de upload armazenado em ViewData["Resultado"]. 
+        Se estiver presente, exibe a mensagem de resultado, uma linha horizontal e, se 
+        houver algum arquivo no ViewBag, itera sobre os arquivos e os exibe em uma lista. *@
         @if (ViewData["Resultado"] != null)
         {
             <h4>@ViewData["Resultado"]</h4>

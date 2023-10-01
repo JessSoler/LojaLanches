@@ -2,10 +2,12 @@
 @{
     ViewBag.Title = "Arquivos";
 }
+@* verifique se a propriedade Filesdo modelo não é nula. *@
 @if (Model.Files != null)
 {
     <h3>Imagens:</h3>
     <hr />
+    @* armazena o caminho base para as imagens não especificadas pelo modelo *@
     var caminho = Model.PathImagesProduto;
     <div class="row">
         @foreach (FileInfo file in Model.Files)
@@ -19,6 +21,7 @@
         }
     </div>
 }
+@* Verifique se há uma mensagem de erro armazenada em ViewData["Erro"] *@
 @if (ViewData["Erro"] != null)
 {
     <img src="~/images/erro1.png" width="150" height="150" />

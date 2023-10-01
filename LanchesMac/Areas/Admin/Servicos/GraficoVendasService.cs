@@ -1,8 +1,11 @@
 ﻿using LanchesMac.Context;
+using LanchesMac.Migrations;
 using LanchesMac.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace LanchesMac.Areas.Admin.Servicos
@@ -16,8 +19,13 @@ namespace LanchesMac.Areas.Admin.Servicos
             this.context = context;
         }
 
+        //é usado para obter dados de vendas de lanches ao longo de um período de tempo especificado(por padrão, 360 dias).
+        //Realiza uma consulta LINQ que junta informações de PedidoDetalhes(itens de pedidos) e Lanches(produtos) com base em IDs relacionados.
+        //Faz um filtro para selecionar apenas os detalhes de pedidos cujos dados de envio(Pedido.PedidoEnviado) sejam maiores ou iguais aos dados de início do período.
+        //Agrupa os resultados com base no ID do lanche e no nome do lanche, calculando a quantidade total vendida(LanchesQuantidade) e o valor total das vendas(LanchesValorTotal) para cada lanche.
         public List<LancheGrafico> GetVendasLanches(int dias = 360)
         {
+            //Calcula o dado de início do período subtraindo o número de dias especificado do dado atual(DateTime.Now)
             var data = DateTime.Now.AddDays(-dias);
 
             var lanches = (from pd in context.PedidoDetalhes

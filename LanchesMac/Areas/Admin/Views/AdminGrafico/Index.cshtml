@@ -8,9 +8,11 @@
 
 <script type="text/javascript">
 
+    //carrega a biblioteca Google Charts e especifica os pacotes "corechart" e "bar" que serão usados ​​para criar gráficos de barras.
     google.charts.load('current', {packages: ['corechart', 'bar']});
     google.charts.setOnLoadCallback(CarregaDados);
 
+    //Função para carregar os dados do banco
     function CarregaDados() {
         $.ajax({
             url: '@Url.Action("VendasLanches", "AdminGrafico")',
@@ -29,6 +31,8 @@
         return false;
     }
 
+    // Os dados são formatados em um array multidimensional dataArrayque representa os valores do gráfico.
+    // Os dados são convertidos em um objeto google.visualization.DataTablepara uso no gráfico.
     function GraficoVendasLanches(data) {
         var dataArray = [
             ['Lanche', 'Quantidade' , 'Valores(R$)']
@@ -51,6 +55,7 @@
                 title: 'Lanches'
             }
         };
+        //um objeto gráfico do tipo google.visualization.BarCharté criado e renderizado < div > com o id"chart_div" usando chart.draw(data, options).
         var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
         chart.draw(data, options);
     }
