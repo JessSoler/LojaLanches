@@ -15,8 +15,10 @@ namespace LanchesMac.Areas.Admin.Controllers
                 new ArgumentNullException(nameof(graficoVendas));
         }
 
+        //recebe um parâmetro dias, que é usado para determinar o período de dias para quem deseja obter dados de vendas de lanches.
         public JsonResult VendasLanches(int dias)
         {
+            //_graficoVendas.GetVendasLanches(dias)para obter os dados de vendas de lanches para o período especificado.
             var lanchesVendasTotais = _graficoVendas.GetVendasLanches(dias);
             return Json(lanchesVendasTotais);
         }

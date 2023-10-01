@@ -11,13 +11,20 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Runtime.Intrinsics.X86;
+using System;
+using System.Collections;
 
 namespace LanchesMac.Areas.Admin.Controllers
 {
+    //especifica que o controlador pertence à área "Admin". 
     [Area("Admin")]
+    //indica que apenas usuários com a função "Admin" têm permissão para acessar
     [Authorize(Roles = "Admin")]
     public class AdminLanchesController : Controller
     {
+        //é o contexto do banco de dados usado para acessar os dados relacionados aos lanches
         private readonly AppDbContext _context;
 
         public AdminLanchesController(AppDbContext context)
@@ -32,6 +39,10 @@ namespace LanchesMac.Areas.Admin.Controllers
         //    return View(await appDbContext.ToListAsync());
         //}
 
+
+       //Esta ação é usada para exibir uma lista paginada de lanches.
+      //São permitidas configurações de consulta, como filter(filtro de pesquisa), pageindex(número da página) e sort(ordenação).
+     //Consulte o banco de dados para obter os lanches, aplicando filtros e ordenação conforme necessário.
         public async Task<IActionResult> Index(string filter, int pageindex = 1, string sort = "Nome")
         {
             var resultado = _context.Lanches.Include(l => l.Categoria)
@@ -43,6 +54,7 @@ namespace LanchesMac.Areas.Admin.Controllers
                 resultado = resultado.Where(p => p.Nome.Contains(filter));
             }
 
+            //criar uma lista paginada de lanches e retorna para a visualização(view) correspondente.
             var model = await PagingList.CreateAsync(resultado, 5, pageindex, sort, "Nome");
 
             model.RouteValue = new RouteValueDictionary { { "filter", filter } };
@@ -51,6 +63,7 @@ namespace LanchesMac.Areas.Admin.Controllers
         }
 
         // GET: Admin/AdminLanches/Details/5
+        //usada para exibir detalhes de um lanche específico com base em seu ID
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -70,6 +83,7 @@ namespace LanchesMac.Areas.Admin.Controllers
         }
 
         // GET: Admin/AdminLanches/Create
+        //usada para exibir um formulário de criação de lanche
         public IActionResult Create()
         {
             ViewBag.ImagemUrl = "/images/produtos/";
@@ -81,6 +95,8 @@ namespace LanchesMac.Areas.Admin.Controllers
         // POST: Admin/AdminLanches/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //lida com a criação de um novo lanche com base nos dados enviados pelo formulário. Verifique se o modelo é válido,
+        //adicione o novo lançamento ao contexto do banco de dados e salve as alterações no banco de dados.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LancheId,Nome,DescricaoCurta,DescricaoDetalhada,Preco,ImagemUrl,ImagemThumbnailUrl,IsLanchePreferido,EmEstoque,CategoriaId")] Lanche lanche)

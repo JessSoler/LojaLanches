@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace LanchesMac.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    //defina que apenas usuários com a função "Admin" têm permissão para acessar
     [Authorize(Roles = "Admin")]
     public class AdminCategoriasController : Controller
     {

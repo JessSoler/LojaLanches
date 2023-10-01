@@ -1,4 +1,5 @@
 ﻿using LanchesMac.Context;
+using LanchesMac.Migrations;
 using LanchesMac.Models;
 using LanchesMac.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -6,15 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using ReflectionIT.Mvc.Paging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace LanchesMac.Areas.Admin.Controllers
 {
+    //especifica que o controlador pertence à área "Admin". 
     [Area("Admin")]
+    //indica que apenas usuários com a função "Admin" têm permissão para acessar
     [Authorize(Roles = "Admin")]
     public class AdminPedidosController : Controller
     {
+        //é o contexto do banco de dados usado para acessar os dados relacionados aos pedidos.
         private readonly AppDbContext _context;
 
         public AdminPedidosController(AppDbContext context)
@@ -28,6 +33,8 @@ namespace LanchesMac.Areas.Admin.Controllers
         //    return View(await _context.Pedidos.ToListAsync());
         //}
 
+       //é usada para exibir os detalhes de um pedido específico com base em seu ID.
+      //Consulta o banco de dados para recuperar o pedido, incluindo os itens do pedido e os lanches associados.
         public IActionResult PedidoLanches(int? id)
         {
             var pedido = _context.Pedidos
@@ -46,12 +53,13 @@ namespace LanchesMac.Areas.Admin.Controllers
                 Pedido = pedido,
                 PedidoDetalhes = pedido.PedidoItens
            };
-           return View(pedidoLanches);           
+           return View(pedidoLanches);
         }
 
-
+        //usada para exibir uma lista paginada de pedidos
         public async Task<IActionResult> Index(string filter, int pageindex = 1, string sort = "Nome")
         {
+            //Consulte o banco de dados para obter os pedidos, aplicando filtros e ordenação conforme necessário.
             var resultado = _context.Pedidos.AsNoTracking()
                            .AsQueryable();
 
@@ -68,6 +76,7 @@ namespace LanchesMac.Areas.Admin.Controllers
             return View(model);
         }
 
+        //o CRUD  segue o mesmo raciocinio do lanches
         // GET: Admin/AdminPedidos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -185,6 +194,7 @@ namespace LanchesMac.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //verifica se um pedido com o ID especificado não existe em banco de dados.
         private bool PedidoExists(int id)
         {
             return _context.Pedidos.Any(e => e.PedidoId == id);
