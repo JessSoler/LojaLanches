@@ -1,0 +1,11 @@
+﻿@* uma página de erro que é exibida quando um usuário tenta acessar uma área de administração sem permissão *@
+<div class="container marginTop1">
+    @* criar uma seção destacada na página *@
+    <div class="jumbotron">
+        <p>
+            <img src="~/images/acessonegado.png" alt="Área de Administração" />
+            <h2>Acesso Negado !</h2>
+        </p>
+    </div>
+    <a asp-area="" asp-controller="Home" asp-action="Index">Volta a Home Page</a>
+</div>

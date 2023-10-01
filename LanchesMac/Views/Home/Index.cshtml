@@ -1,0 +1,23 @@
+﻿@model HomeViewModel
+
+@*@await Html.PartialAsync("_Carousel")*@
+
+@* renderiza parcialmente a visualização do "_Carousel"
+<partial>é uma maneira de incorporar uma visualização parcial em outra visualização*@
+<partial name="_Carousel" />
+
+<h2>Os preferidos da semana </h2>
+<h4>Tá com fome ???</h4>
+@* mostrar os lanches preferidos *@
+<div class="row">
+    @* inicia um loop, para cada lanche na lista, o código dentro do loop é executado *@
+    @foreach (var lanche in Model.LanchesPreferidos)
+    {
+        @*@Html.Partial("_LanchesResumo", lanche)*@
+
+        @* renderiza parcialmente a visualização chamada "_LanchesResumo" para cada lanche na lista.
+        O atributo nameespecifica o nome da visualização parcial e o atributo forpassa o objeto lancheatual 
+        como modelo para a visualização parcial. *@
+        <partial name="_LanchesResumo" for="@lanche" />
+    }
+</div>
